@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
+import FacebookLogin from 'react-facebook-login';
+
 
 import Input from '../../components/UI/Input/Input';
 import Button from '../../components/UI/Button/Button';
@@ -72,6 +74,14 @@ class Auth extends Component {
         } );
     }
 
+    responseFacebook = (response) => {
+      console.log(response);
+    }
+
+    componentClicked = (response) => {
+      console.log(response);
+    }
+
     render () {
         const formElementsArray = [];
         for ( let key in this.state.controls ) {
@@ -111,7 +121,17 @@ class Auth extends Component {
         }
 
         return (
-            <div className={classes.Auth}>
+
+            <div>
+                <FacebookLogin
+                    appId="339967319744088"
+                    autoLoad={false}
+                    fields="name,email,picture"
+                    onClick={this.componentClicked}
+                    callback={this.responseFacebook} />
+            </div>
+
+            /*<div className={classes.Auth}>
                 {authRedirect}
                 {errorMessage}
                 <form onSubmit={this.submitHandler}>
@@ -121,7 +141,7 @@ class Auth extends Component {
                 <Button
                     clicked={this.switchAuthModeHandler}
                     btnType="Danger">SWITCH TO {this.state.isSignup ? 'SIGNIN' : 'SIGNUP'}</Button>
-            </div>
+            </div>*/
         );
     }
 }
