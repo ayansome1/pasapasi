@@ -1,0 +1,23 @@
+{
+	"sqlconn": {
+		"connectionLimit": 10,
+		"host": "127.0.0.1",
+		"user": "root",
+		"password": "root",
+		"database": "pasapasi",
+		"port": 3306,
+		"multipleStatements": true
+	},
+	"pasapasi": {
+		"port": 9080,
+		"corsorigin": "http://localhost"
+	},
+	"facebookAuth": {
+		"clientid": "196789641794-g3mslicohln3l34v8q86g1f22i342no3.apps.googleusercontent.com",
+		"clientsecret": "Acympu1eJKTvIGvxEFyF9IVv",
+		"callbackUrl": "http://localhost/notes/api/auth/google/callback",
+		"redirect": "http://localhost/notes/app/#/",
+		"failureRedirect": "http://localhost/notes/app/#/login"
+	},
+	"sessionSecret" : "Pasapasi@911#!"
+}
