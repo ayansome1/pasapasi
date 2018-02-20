@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
-import FacebookLogin from 'react-facebook-login';
+// import FacebookLogin from 'react-facebook-login';
 
 // import Input from '../../components/UI/Input/Input';
 // import Button from '../../components/UI/Button/Button';
@@ -47,7 +47,11 @@ class Auth extends Component {
             <div>
                 {authRedirect}
 
-                <FacebookLogin
+
+                <a href={"http://localhost:9090/pasapasi/api/auth/facebook"}>
+                    login
+                </a>
+{/*                <FacebookLogin
                     appId="339967319744088"
                     autoLoad={false}
                     fields="name,email"
@@ -56,7 +60,7 @@ class Auth extends Component {
                     // scope="public_profile,user_friends,user_photos"
                     onClick={this.componentClicked}
                     callback={this.responseFacebook}
-                />
+                />*/}
             </div>
 
             /*<div className={classes.Auth}>

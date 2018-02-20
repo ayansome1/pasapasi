@@ -9,7 +9,7 @@
 		"multipleStatements": true
 	},
 	"pasapasi": {
-		"port": 9080,
+		"port": 9090,
 		"corsorigin": "http://localhost:3000"
 	},
 	"facebookAuth": {
