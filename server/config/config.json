@@ -10,14 +10,14 @@
 	},
 	"pasapasi": {
 		"port": 9080,
-		"corsorigin": "http://localhost"
+		"corsorigin": "http://localhost:3000"
 	},
 	"facebookAuth": {
-		"clientid": "196789641794-g3mslicohln3l34v8q86g1f22i342no3.apps.googleusercontent.com",
-		"clientsecret": "Acympu1eJKTvIGvxEFyF9IVv",
-		"callbackUrl": "http://localhost/notes/api/auth/google/callback",
-		"redirect": "http://localhost/notes/app/#/",
-		"failureRedirect": "http://localhost/notes/app/#/login"
+		"clientid": "339967319744088",
+		"clientsecret": "12e8f11629f59f3d3bbdf2d814d6afc1",
+		"callbackUrl": "http://localhost:3000/pasapasi/api/auth/facebook/callback",
+		"redirect": "http://localhost:3000",
+		"failureRedirect": "http://localhost:3000/auth"
 	},
 	"sessionSecret" : "Pasapasi@911#!"
 }
