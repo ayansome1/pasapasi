@@ -49,22 +49,22 @@ app.use(session({
 
 function saveUserProfile(profile) {
 
-    let email = profile._json.email || null;
-    let fb_id = profile._json.id || null;
-    let name = profile._json.name || null;
-    let first_name = profile._json.first_name || null;
-    let fb_link = profile._json.link || null;
+    // let email = profile._json.email || null;
+    // let fb_id = profile._json.id || null;
+    // let name = profile._json.name || null;
+    // let first_name = profile._json.first_name || null;
+    // let fb_link = profile._json.link || null;
 
-    let gender = profile._json.gender || null;
-    if(gender == 'male'){
-        gender = 'M';
-    }
-    else if(gender == 'female'){
-        gender = 'F';
-    }
-    else{
-        gender = 'O';
-    }
+    // let gender = profile._json.gender || null;
+    // if(gender == 'male'){
+    //     gender = 'M';
+    // }
+    // else if(gender == 'female'){
+    //     gender = 'F';
+    // }
+    // else{
+    //     gender = 'O';
+    // }
 
 
     let deferred = q.defer();
@@ -80,11 +80,11 @@ function saveUserProfile(profile) {
               fb_link = values(fb_link),
               fb_id = values(fb_id);`;
     
-    params.push(name,email,gender,first_name,fb_link,fb_id);
+    params.push(profile.name,profile.email,profile.gender,profile.first_name,profile.fb_link,profile.fb_id);
   
     let q2 = "Select * from users where fb_id = ?;";
 
-    params.push(fb_id);
+    params.push(profile.fb_id);
 
     connection.query(q1 + q2, params, function(err, results) {
         if (err) {
@@ -108,16 +108,34 @@ function saveUserProfile(profile) {
 passport.use(new FacebookStrategy(facebookAuthParams,
   function(req, accessToken, refreshToken, profile, done) {
 
-        console.log('profile:',profile);
+        // console.log('profile:',profile);
         // console.log('p:',profile);
+        let userProfile = {};
+
+        userProfile.email = profile._json.email || null;
+        userProfile.fb_id = profile._json.id || null;
+        userProfile.name = profile._json.name || null;
+        userProfile.first_name = profile._json.first_name || null;
+        userProfile.fb_link = profile._json.link || null;
+
+        
+        if(profile._json.gender == 'male'){
+            userProfile.gender = 'M';
+        }
+        else if(profile._json.gender == 'female'){
+            userProfile.gender = 'F';
+        }
+        else{
+            userProfile.gender = 'O';
+        }
 
 
-        saveUserProfile(profile).then(function(user) {
+        saveUserProfile(userProfile).then(function(user) {
             if (_.isEmpty(user)) {
                 return done(null, false);
             }
 
-            return done(null, profile);
+            return done(null, user);
 
         });  
   }
@@ -126,13 +144,13 @@ passport.use(new FacebookStrategy(facebookAuthParams,
 app.use(passport.initialize());
 app.use(passport.session());
 
-function getUserInfo(email) {
+function getUserInfo(fb_id) {
     var deferred = q.defer();
     var connection = mysql.createConnection(connInfo);
 
-    var query = "Select * from users where email = ?;";
+    var query = "Select * from users where fb_id = ?;";
 
-    connection.query(query, [email], function(err, result) {
+    connection.query(query, [fb_id], function(err, result) {
         if (err) {
             deferred.reject(err);
         } else {
@@ -145,14 +163,10 @@ function getUserInfo(email) {
 
 passport.serializeUser(function(req, user, done) {
 
-    let userDetails = {};
-    userDetails.name = user._json.name;
-    userDetails.picture = user._json.picture;
-    userDetails.email = user._json.email;
+    console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",user);
 
-    getUserInfo(user._json.email).then(function(result) {
-        userDetails.userId = result.id;
-        return done(null, userDetails);
+    getUserInfo(user.fb_id).then(function(result) {
+        return done(null, result);
     }, function(err) {
         winston.error(err);
     });
@@ -170,11 +184,11 @@ app.get('/auth/facebook', passport.authenticate('facebook',
 
 ));
 
-app.get('/auth/facebook/callback', function (req,res){
-    // console.log("--------------------",res);
-    console.log("****************************************************",config.facebookAuth.redirect);
-    res.redirect(config.facebookAuth.redirect);
-});
+// app.get('/auth/facebook/callback', function (req,res){
+//     // console.log("--------------------",res);
+//     console.log("****************************************************",config.facebookAuth.redirect);
+//     res.redirect(config.facebookAuth.redirect);
+// });
 
 
 /*app.get('/auth/facebook/callback', passport.authenticate('facebook', {
@@ -185,10 +199,10 @@ app.get('/auth/facebook/callback', function (req,res){
 });*/
 
 
-// app.get('/auth/facebook/callback', passport.authenticate('facebook', {
-//     successRedirect: config.facebookAuth.redirect,
-//     failureRedirect: config.facebookAuth.failureRedirect
-// }));
+app.get('/auth/facebook/callback', passport.authenticate('facebook', {
+    successRedirect: config.facebookAuth.redirect,
+    failureRedirect: config.facebookAuth.failureRedirect
+}));
 
 /*app.get('/auth/facebook/callback', passport.authenticate('facebook', 
     {failureRedirect: config.facebookAuth.failureRedirect}),
