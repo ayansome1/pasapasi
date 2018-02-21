@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Redirect } from 'react-router-dom';
+// import { Redirect } from 'react-router-dom';
 // import FacebookLogin from 'react-facebook-login';
 
 // import Input from '../../components/UI/Input/Input';
@@ -46,7 +46,7 @@ class Auth extends Component {
         return (
             <div>
                 <a href={"http://localhost/pasapasi/api/auth/facebook"}>
-                    login
+                    login with facebook
                 </a>
 
             </div>

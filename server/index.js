@@ -204,14 +204,6 @@ app.get('/auth/facebook/callback', passport.authenticate('facebook', {
     failureRedirect: config.facebookAuth.failureRedirect
 }));
 
-/*app.get('/auth/facebook/callback', passport.authenticate('facebook', 
-    {failureRedirect: config.facebookAuth.failureRedirect}),
-    function(req,res){
-        console.log("---------------------------------------");
-        res.redirect(config.facebookAuth.redirect);
-        // successRedirect: config.facebookAuth.redirect,
-    });
-*/
 app.get('/loggedin', function(req, res) {
     res.send(req.isAuthenticated() ? req.user : false);
 });
@@ -255,10 +247,6 @@ function auth() {
 // let pasapasiRoutes = require('./routes/pasapasi-server-routes.js');
 // pasapasiRoutes(app,auth);
 
-// app.get('/abc', function(req, res) {
-//     console.log("yeahhhhhhhhhhhhhhh");
-//     res.send("yeahhhhhhhhhh");
-// });
 
 let server = http.createServer(app);
 server.listen(config.pasapasi.port);
