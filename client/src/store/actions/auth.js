@@ -8,11 +8,9 @@ export const authStart = () => {
     };
 };
 
-export const authSuccess = (token, userId) => {
+export const authSuccess = (user) => {
     return {
         type: actionTypes.AUTH_SUCCESS,
-        idToken: token,
-        userId: userId
     };
 };
 
@@ -24,22 +22,54 @@ export const authFail = (error) => {
 };
 
 export const logout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('expirationDate');
-    localStorage.removeItem('userId');
+    localStorage.removeItem('user');
+    // localStorage.removeItem('expirationDate');
+    // localStorage.removeItem('userId');
     return {
         type: actionTypes.AUTH_LOGOUT
     };
 };
 
-export const checkAuthTimeout = (expirationTime) => {
-    return dispatch => {
-        setTimeout(() => {
-            dispatch(logout());
-        }, expirationTime * 1000);
-    };
-};
+// export const checkAuthTimeout = (expirationTime) => {
+//     return dispatch => {
+//         setTimeout(() => {
+//             dispatch(logout());
+//         }, expirationTime * 1000);
+//     };
+// };
 
+/*const checkLoggedIn = () => {
+
+    return dispatch => {
+
+
+        let url = "http://localhost/pasapasi/api/loggedin";
+
+        axios.get(url)
+        .then(response => {
+
+            if(response.data){
+                localStorage.setItem('user',response.data);
+                dispatch(authSuccess(response.data.idToken, response.data.localId));            
+            }
+            else{
+                dispatch(authFail(err.response.data.error));
+            }
+
+
+            // const expirationDate = new Date(new Date().getTime() + response.data.expiresIn * 1000);
+            // localStorage.setItem('token', response.data.idToken);
+            // localStorage.setItem('expirationDate', expirationDate);
+            // localStorage.setItem('userId', response.data.localId);
+            // dispatch(checkAuthTimeout(response.data.expiresIn));
+        })
+        .catch(err => {
+            dispatch(authFail(err.response.data.error));
+        });    
+    };
+
+}
+*/
 export const auth = (email, password, isSignup) => {
     return dispatch => {
         dispatch(authStart());
@@ -67,27 +97,21 @@ export const auth = (email, password, isSignup) => {
     };
 };
 
-export const setAuthRedirectPath = (path) => {
-    return {
-        type: actionTypes.SET_AUTH_REDIRECT_PATH,
-        path: path
-    };
-};
+// export const setAuthRedirectPath = (path) => {
+//     return {
+//         type: actionTypes.SET_AUTH_REDIRECT_PATH,
+//         path: path
+//     };
+// };
 
 export const authCheckState = () => {
     return dispatch => {
-        const token = localStorage.getItem('token');
-        if (!token) {
+        const user = localStorage.getItem('user');
+        if (!user) {
             dispatch(logout());
         } else {
-            const expirationDate = new Date(localStorage.getItem('expirationDate'));
-            if (expirationDate <= new Date()) {
-                dispatch(logout());
-            } else {
-                const userId = localStorage.getItem('userId');
-                dispatch(authSuccess(token, userId));
-                dispatch(checkAuthTimeout((expirationDate.getTime() - new Date().getTime()) / 1000 ));
-            }   
+            const user = localStorage.getItem('user');
+            dispatch(authSuccess(user)); 
         }
     };
 };
