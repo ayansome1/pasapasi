@@ -14,9 +14,9 @@ class Auth extends Component {
     state = {};
 
     componentDidMount() {
-        if (this.props.authRedirectPath !== '/') {
-            this.props.onSetAuthRedirectPath();
-        }
+        // if (this.props.authRedirectPath !== '/') {
+        //     this.props.onSetAuthRedirectPath();
+        // }
     }
 
     responseFacebook = response => {
@@ -38,29 +38,17 @@ class Auth extends Component {
         //     errorMessage = <p>{this.props.error.message}</p>;
         // }
 
-        let authRedirect = null;
-        if (this.props.isAuthenticated) {
-            authRedirect = <Redirect to={this.props.authRedirectPath} />;
-        }
+        // let authRedirect = null;
+        // if (this.props.isAuthenticated) {
+        //     authRedirect = <Redirect to={this.props.authRedirectPath} />;
+        // }
 
         return (
             <div>
-                {authRedirect}
-
-
-                <a href={"http://localhost:9090/pasapasi/api/auth/facebook"}>
+                <a href={"http://localhost/pasapasi/api/auth/facebook"}>
                     login
                 </a>
-{/*                <FacebookLogin
-                    appId="339967319744088"
-                    autoLoad={false}
-                    fields="name,email"
-                    scope="public_profile,user_friends"
-                    // redirectUri="http://localhost:3000"
-                    // scope="public_profile,user_friends,user_photos"
-                    onClick={this.componentClicked}
-                    callback={this.responseFacebook}
-                />*/}
+
             </div>
 
             /*<div className={classes.Auth}>
@@ -83,14 +71,14 @@ const mapStateToProps = state => {
         loading: state.auth.loading,
         error: state.auth.error,
         isAuthenticated: state.auth.token !== null,
-        buildingBurger: state.burgerBuilder.building,
-        authRedirectPath: state.auth.authRedirectPath,
+        buildingBurger: state.burgerBuilder.building/*,
+        authRedirectPath: state.auth.authRedirectPath,*/
     };
 };
 
 const mapDispatchToProps = dispatch => {
     return {
-        // onAuth: (email, password, isSignup) => dispatch(actions.auth(email, password, isSignup)),
+        onAuth: (email, password, isSignup) => dispatch(actions.auth(email, password, isSignup)),
         onSetAuthRedirectPath: () => dispatch(actions.setAuthRedirectPath('/')),
     };
 };

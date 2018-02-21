@@ -29,6 +29,7 @@ let facebookAuthParams = {
     clientID: config.facebookAuth.clientid,
     clientSecret: config.facebookAuth.clientsecret,
     callbackURL: config.facebookAuth.callbackUrl,
+    profileFields: ['id', 'displayName', 'email', 'first_name', 'middle_name', 'last_name','photos', 'birthday', 'friends','gender','link'],
     passReqToCallback: true
 };
 
@@ -47,20 +48,43 @@ app.use(session({
 
 
 function saveUserProfile(profile) {
+
+    let email = profile._json.email || null;
+    let fb_id = profile._json.id || null;
+    let name = profile._json.name || null;
+    let first_name = profile._json.first_name || null;
+    let fb_link = profile._json.link || null;
+
+    let gender = profile._json.gender || null;
+    if(gender == 'male'){
+        gender = 'M';
+    }
+    else if(gender == 'female'){
+        gender = 'F';
+    }
+    else{
+        gender = 'O';
+    }
+
+
     let deferred = q.defer();
     let connection = mysql.createConnection(connInfo);
 
     let params = [];
-    let q1 = `Insert into users (email,name) VALUES (?,?) 
+    let q1 = `Insert into users (email,name,gender,first_name,fb_link,fb_id) VALUES (?,?,?,?,?,?) 
     		  on DUPLICATE key update 
     		  name = values(name),
-    		  email = values(email);`;
+    		  email = values(email),
+              gender = values(gender),
+              first_name = values(first_name),
+              fb_link = values(fb_link),
+              fb_id = values(fb_id);`;
     
-    // params.push(profile._json.email,profile._json.name,profile._json.picture);
+    params.push(name,email,gender,first_name,fb_link,fb_id);
   
-    let q2 = "Select * from users where email = ?;";
+    let q2 = "Select * from users where fb_id = ?;";
 
-    // params.push(profile._json.email);
+    params.push(fb_id);
 
     connection.query(q1 + q2, params, function(err, results) {
         if (err) {
@@ -83,6 +107,10 @@ function saveUserProfile(profile) {
 
 passport.use(new FacebookStrategy(facebookAuthParams,
   function(req, accessToken, refreshToken, profile, done) {
+
+        console.log('profile:',profile);
+        // console.log('p:',profile);
+
 
         saveUserProfile(profile).then(function(user) {
             if (_.isEmpty(user)) {
@@ -135,13 +163,41 @@ passport.deserializeUser(function( user, done) {
   done(null, user);
 });
 
-app.get('/auth/facebook', passport.authenticate('facebook'/*, {scope: ['email', 'profile']}*/));
+app.get('/auth/facebook', passport.authenticate('facebook', 
+    {
+        scope: ['user_friends', 'email', 'public_profile']
+    }
 
-app.get('/auth/facebook/callback', passport.authenticate('facebook', {
-    successRedirect: config.facebookAuth.redirect,
+));
+
+app.get('/auth/facebook/callback', function (req,res){
+    // console.log("--------------------",res);
+    console.log("****************************************************",config.facebookAuth.redirect);
+    res.redirect(config.facebookAuth.redirect);
+});
+
+
+/*app.get('/auth/facebook/callback', passport.authenticate('facebook', {
     failureRedirect: config.facebookAuth.failureRedirect
-}));
+}),function(req,res){
+    console.log("++++++++++++++++++++++");
+    res.redirect('/');
+});*/
 
+
+// app.get('/auth/facebook/callback', passport.authenticate('facebook', {
+//     successRedirect: config.facebookAuth.redirect,
+//     failureRedirect: config.facebookAuth.failureRedirect
+// }));
+
+/*app.get('/auth/facebook/callback', passport.authenticate('facebook', 
+    {failureRedirect: config.facebookAuth.failureRedirect}),
+    function(req,res){
+        console.log("---------------------------------------");
+        res.redirect(config.facebookAuth.redirect);
+        // successRedirect: config.facebookAuth.redirect,
+    });
+*/
 app.get('/loggedin', function(req, res) {
     res.send(req.isAuthenticated() ? req.user : false);
 });
@@ -182,8 +238,13 @@ function auth() {
     };
 }
 
-let pasapasiRoutes = require('./routes/pasapasi-server-routes.js');
-pasapasiRoutes(app,auth);
+// let pasapasiRoutes = require('./routes/pasapasi-server-routes.js');
+// pasapasiRoutes(app,auth);
+
+// app.get('/abc', function(req, res) {
+//     console.log("yeahhhhhhhhhhhhhhh");
+//     res.send("yeahhhhhhhhhh");
+// });
 
 let server = http.createServer(app);
 server.listen(config.pasapasi.port);
