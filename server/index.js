@@ -32,6 +32,9 @@ let facebookAuthParams = {
     passReqToCallback: true
 };
 
+
+
+
 app.use(session({
     secret: config.sessionSecret,
     name: "pasapasi",
@@ -45,6 +48,8 @@ app.use(session({
     saveUninitialized: true
 }));
 
+app.use(passport.initialize());
+app.use(passport.session());
 
 
 
@@ -181,16 +186,21 @@ function getUserInfo(fb_id) {
 
 passport.serializeUser(function(req, user, done) {
 
-    console.log("serializeUser");
+    // done(null,user);
+
+    // console.log("serializeUser");
+    done(null, user.fb_id);
 
   // console.log('serializeUserrrrrrr::::::::::::::::::::::::::::::::::::: req.user...' + JSON.stringify(req.user));
   // console.log('serializeUserrrrrrr::::::::::::::::::::::::::::::::: user' + user.fb_id);
-  done(null, user.fb_id);
 });
 
 
 
 passport.deserializeUser(function(fb_id, done) {
+
+
+
 
     // console.log('DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDd',fb_id);
     console.log("deserializeUser");
@@ -203,8 +213,8 @@ passport.deserializeUser(function(fb_id, done) {
     });
 });
 
-app.use(passport.initialize());
-app.use(passport.session());
+// app.use(passport.initialize());
+// app.use(passport.session());
 
 
 app.get('/auth/facebook', passport.authenticate('facebook', 
@@ -223,7 +233,7 @@ app.get('/auth/facebook/callback', passport.authenticate('facebook', {
 
 app.get('/loggedin', function(req, res) {
     // console.log("$$$$$$$$$$$$$$$$$$$$$$$$$req.user is : ",req.user);
-    res.send(req.isAuthenticated() ? req.user : false);
+    res.send(req.isAuthenticated() ? req.user : 'false');
 });
 
 /*app.get('/abc', function(req, res) {

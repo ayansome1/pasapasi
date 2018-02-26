@@ -10,7 +10,7 @@ import Layout from './hoc/Layout/Layout';
 // import Logout from './containers/Auth/Logout/Logout';
 // import * as actions from './store/actions/index';
 
-import Auth from './containers/Auth/Auth'
+// import Auth from './containers/Auth/Auth'
 import RequireAuth from './hoc/RequireAuth/RequireAuth';
 
 import Home from './containers/Home/Home';
@@ -65,7 +65,7 @@ class App extends Component {
       <div>
         <Layout>
           <Switch>
-          <Route path="/auth" component={Auth} />
+          {/*<Route path="/auth" component={Auth} />*/}
           {/*<Route path="/checkout" component={RequireAuth(asyncCheckout)}/>*/}
           <Route path="/" exact component={RequireAuth(Home)}/>
           <Route path="/profile" exact component={RequireAuth(Profile)}/>
