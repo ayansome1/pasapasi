@@ -1,72 +1,100 @@
 import React, { Component } from 'react';
-import { Route, Switch, withRouter, Redirect } from 'react-router-dom';
-import { connect } from 'react-redux';
-import asyncComponent from './hoc/asyncComponent/asyncComponent';
+// import { Route, Switch, withRouter, Redirect } from 'react-router-dom';
+import { Route, Switch} from 'react-router-dom';
+
+// import { connect } from 'react-redux';
+// import asyncComponent from './hoc/asyncComponent/asyncComponent';
 
 import Layout from './hoc/Layout/Layout';
-import BurgerBuilder from './containers/BurgerBuilder/BurgerBuilder';
-import Logout from './containers/Auth/Logout/Logout';
-import * as actions from './store/actions/index';
+// import BurgerBuilder from './containers/BurgerBuilder/BurgerBuilder';
+// import Logout from './containers/Auth/Logout/Logout';
+// import * as actions from './store/actions/index';
 
-const asyncCheckout = asyncComponent(() => {
-  return import('./containers/Checkout/Checkout');
-});
+import Auth from './containers/Auth/Auth'
+import RequireAuth from './hoc/RequireAuth/RequireAuth';
 
-const asyncOrders = asyncComponent(() => {
-  return import('./containers/Orders/Orders');
-});
+import Home from './containers/Home/Home';
+import Profile from './containers/Profile/Profile';
+import Login from './containers/Login/Login';
 
-const asyncAuth = asyncComponent(() => {
-  return import('./containers/Auth/Auth');
-});
+
+// const asyncCheckout = asyncComponent(() => {
+//   return import('./containers/Checkout/Checkout');
+// });
+
+// const asyncOrders = asyncComponent(() => {
+//   return import('./containers/Orders/Orders');
+// });
+
+// const asyncAuth = asyncComponent(() => {
+//   return import('./containers/Auth/Auth');
+// });
 
 class App extends Component {
   componentDidMount () {
-    this.props.onTryAutoSignup();
+    // this.props.onTryAutoSignup();
   }
 
   render () {
-    let routes = (
-      <Switch>
-        <Route path="/auth" component={asyncAuth} />
-        <Route path="/" exact component={BurgerBuilder} />
-        <Redirect to="/" />
-      </Switch>
-    );
 
-    if ( this.props.isAuthenticated ) {
-      routes = (
-        <Switch>
-          <Route path="/checkout" component={asyncCheckout} />
-          <Route path="/orders" component={asyncOrders} />
-          <Route path="/logout" component={Logout} />
-          <Route path="/auth" component={asyncAuth} />
-          <Route path="/" exact component={BurgerBuilder} />
-          <Redirect to="/" />
-        </Switch>
-      );
-    }
+    console.log("called");
+
+
+    // let routes = (
+    //   <Switch>
+    //     <Route path="/auth" component={asyncAuth} />
+    //     <Route path="/" exact component={BurgerBuilder} />
+    //     <Redirect to="/" />
+    //   </Switch>
+    // );
+
+    // if ( this.props.isAuthenticated ) {
+    //   routes = (
+    //     <Switch>
+    //       <Route path="/checkout" component={asyncCheckout} />
+    //       <Route path="/orders" component={asyncOrders} />
+    //       <Route path="/logout" component={Logout} />
+    //       <Route path="/auth" component={asyncAuth} />
+    //       <Route path="/" exact component={BurgerBuilder} />
+    //       <Redirect to="/" />
+    //     </Switch>
+    //   );
+    // }
 
     return (
       <div>
         <Layout>
-          {routes}
+          <Switch>
+          <Route path="/auth" component={Auth} />
+          {/*<Route path="/checkout" component={RequireAuth(asyncCheckout)}/>*/}
+          <Route path="/home" exact component={RequireAuth(Home)}/>
+          <Route path="/profile" exact component={RequireAuth(Profile)}/>
+          <Route path="/login" exact component={Login}/>
+
+
+
+          </Switch>
+
         </Layout>
       </div>
     );
+
+
+
   }
 }
 
-const mapStateToProps = state => {
-  return {
-    isAuthenticated: state.auth.token !== null
-  };
-};
+// const mapStateToProps = state => {
+//   return {
+//     isAuthenticated: state.auth.token !== null
+//   };
+// };
 
-const mapDispatchToProps = dispatch => {
+/*const mapDispatchToProps = dispatch => {
   return {
-    onTryAutoSignup: () => dispatch( actions.authCheckState() )
+    // onTryAutoSignup: () => dispatch( actions.authCheckState() )
   };
-};
+};*/
 
-export default withRouter( connect( mapStateToProps, mapDispatchToProps )( App ) );
+export default App;
+// export default withRouter( connect( mapStateToProps, mapDispatchToProps )( App ) );

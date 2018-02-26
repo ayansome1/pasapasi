@@ -16,7 +16,6 @@ let q = require('q');
 let _ = require('underscore');
 let mysql = require('mysql');
 var FacebookStrategy = require('passport-facebook').Strategy;
-// let StrategyGoogle = require('passport-google-openidconnect').Strategy;
 let session = require('express-session');
 let MongoStore = require('connect-mongo')(session);
 let mongoConnectionUrl = 'mongodb://localhost:27017/pasapasiusers';
@@ -48,24 +47,6 @@ app.use(session({
 
 
 function saveUserProfile(profile) {
-
-    // let email = profile._json.email || null;
-    // let fb_id = profile._json.id || null;
-    // let name = profile._json.name || null;
-    // let first_name = profile._json.first_name || null;
-    // let fb_link = profile._json.link || null;
-
-    // let gender = profile._json.gender || null;
-    // if(gender == 'male'){
-    //     gender = 'M';
-    // }
-    // else if(gender == 'female'){
-    //     gender = 'F';
-    // }
-    // else{
-    //     gender = 'O';
-    // }
-
 
     let deferred = q.defer();
     let connection = mysql.createConnection(connInfo);
@@ -108,8 +89,6 @@ function saveUserProfile(profile) {
 passport.use(new FacebookStrategy(facebookAuthParams,
   function(req, accessToken, refreshToken, profile, done) {
 
-        // console.log('profile:',profile);
-        // console.log('p:',profile);
         let userProfile = {};
 
         userProfile.email = profile._json.email || null;
@@ -184,21 +163,6 @@ app.get('/auth/facebook', passport.authenticate('facebook',
 
 ));
 
-// app.get('/auth/facebook/callback', function (req,res){
-//     // console.log("--------------------",res);
-//     console.log("****************************************************",config.facebookAuth.redirect);
-//     res.redirect(config.facebookAuth.redirect);
-// });
-
-
-/*app.get('/auth/facebook/callback', passport.authenticate('facebook', {
-    failureRedirect: config.facebookAuth.failureRedirect
-}),function(req,res){
-    console.log("++++++++++++++++++++++");
-    res.redirect('/');
-});*/
-
-
 app.get('/auth/facebook/callback', passport.authenticate('facebook', {
     successRedirect: config.facebookAuth.redirect,
     failureRedirect: config.facebookAuth.failureRedirect
@@ -207,6 +171,10 @@ app.get('/auth/facebook/callback', passport.authenticate('facebook', {
 app.get('/loggedin', function(req, res) {
     res.send(req.isAuthenticated() ? req.user : false);
 });
+
+/*app.get('/abc', function(req, res) {
+    res.send("yeahhhhhhhhhhhhhhhhhh");
+});*/
 
 app.get('/logout', function(req, res) {
     req.logout();

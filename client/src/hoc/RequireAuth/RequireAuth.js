@@ -1,8 +1,7 @@
 import React from 'react';
 import { Redirect } from 'react-router-dom';
 
-import axios from 'axios';
-
+import axios from '../../axios-orders';
 
 const RequireAuth = (Component) => { 
 
@@ -13,6 +12,7 @@ const RequireAuth = (Component) => {
         }
 
         componentDidMount() {
+            console.log("mounting");
             axios.get('/loggedin').then((user) => {
               console.log("********logged in user",user);
                 this.setState({isAuthenticated: true, isLoading: false});
@@ -21,11 +21,16 @@ const RequireAuth = (Component) => {
             })
         } 
         render() { 
+            console.log("mounting");
+
            const { isAuthenticated, isLoading } = this.state;
            if(isLoading) {
+            console.log("loading before redirect")
+
                return <div>Loading...</div>
            }
            if(!isAuthenticated) {
+            console.log("Redirect")
                return <Redirect to="/login" />
            }
            return <Component {...this.props} /> 
@@ -34,4 +39,4 @@ const RequireAuth = (Component) => {
 
 } 
 
-export { RequireAuth }
+export default  RequireAuth ;

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
+// import { connect } from 'react-redux';
 // import { Redirect } from 'react-router-dom';
 // import FacebookLogin from 'react-facebook-login';
 
@@ -7,11 +7,11 @@ import { connect } from 'react-redux';
 // import Button from '../../components/UI/Button/Button';
 // import Spinner from '../../components/UI/Spinner/Spinner';
 // import classes from './Auth.css';
-import * as actions from '../../store/actions/index';
+// import * as actions from '../../store/actions/index';
 // import { updateObject, checkValidity } from '../../shared/utility';
 
 class Auth extends Component {
-    state = {};
+    // state = {};
 
     componentDidMount() {
         // if (this.props.authRedirectPath !== '/') {
@@ -19,13 +19,13 @@ class Auth extends Component {
         // }
     }
 
-    responseFacebook = response => {
-        console.log(response);
-    };
+    // responseFacebook = response => {
+    //     console.log(response);
+    // };
 
-    componentClicked = response => {
-        console.log(response);
-    };
+    // componentClicked = response => {
+    //     console.log(response);
+    // };
 
     render() {
         /*        if (this.props.loading) {
@@ -66,21 +66,21 @@ class Auth extends Component {
     }
 }
 
-const mapStateToProps = state => {
-    return {
-        loading: state.auth.loading,
-        error: state.auth.error,
-        isAuthenticated: state.auth.token !== null,
-        buildingBurger: state.burgerBuilder.building/*,
-        authRedirectPath: state.auth.authRedirectPath,*/
-    };
-};
+// const mapStateToProps = state => {
+//     return {
+//         //loading: state.auth.loading,
+//         //error: state.auth.error,
+//         //isAuthenticated: state.auth.token !== null,
+//         //buildingBurger: state.burgerBuilder.building,
+//         //authRedirectPath: state.auth.authRedirectPath
+//     };
+// };
 
-const mapDispatchToProps = dispatch => {
-    return {
-        onAuth: (email, password, isSignup) => dispatch(actions.auth(email, password, isSignup)),
-        onSetAuthRedirectPath: () => dispatch(actions.setAuthRedirectPath('/')),
-    };
-};
+// const mapDispatchToProps = dispatch => {
+//     return {
+//         //onAuth: (email, password, isSignup) => dispatch(actions.auth(email, password, isSignup)),
+//         //onSetAuthRedirectPath: () => dispatch(actions.setAuthRedirectPath('/')),
+//     };
+// };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Auth);
+export default Auth;//connect(mapStateToProps, mapDispatchToProps)(Auth);
