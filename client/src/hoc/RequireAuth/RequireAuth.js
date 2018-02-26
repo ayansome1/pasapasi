@@ -18,7 +18,7 @@ const RequireAuth = (Component) => {
                 this.setState({isAuthenticated: true, isLoading: false});
             }).catch(() => {
                 this.setState({isLoading: false});
-            })
+            });
         } 
         render() { 
             console.log("mounting");

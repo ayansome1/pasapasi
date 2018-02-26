@@ -34,7 +34,7 @@ let facebookAuthParams = {
 
 app.use(session({
     secret: config.sessionSecret,
-    name: "notes",
+    name: "pasapasi",
     cookie: { maxAge: 3 * 24 * 60 * 60 * 1000},
     store: new MongoStore({
         url: mongoConnectionUrl,
@@ -46,7 +46,11 @@ app.use(session({
 }));
 
 
+
+
 function saveUserProfile(profile) {
+
+    console.log("save user profile");
 
     let deferred = q.defer();
     let connection = mysql.createConnection(connInfo);
@@ -61,26 +65,36 @@ function saveUserProfile(profile) {
               fb_link = values(fb_link),
               fb_id = values(fb_id);`;
     
-    params.push(profile.name,profile.email,profile.gender,profile.first_name,profile.fb_link,profile.fb_id);
+    params.push(profile.email,profile.name,profile.gender,profile.first_name,profile.fb_link,profile.fb_id);
   
     let q2 = "Select * from users where fb_id = ?;";
 
     params.push(profile.fb_id);
 
     connection.query(q1 + q2, params, function(err, results) {
+
+    // console.log(sql.sql);
+
         if (err) {
             winston.error(err);
             deferred.reject(err);
         }
 
+        // console.log("&&&&\n\n",results[1][0],"&&&&");
+
         let user = results[1][0];
 
-        if(results[1][0]){
+        if(user){
             deferred.resolve(user);
         }
+        else{
+            deferred.resolve();
+        }
 
-        deferred.resolve();
+        // deferred.resolve();
     });
+
+    // console.log(sql.sql);
 
     connection.end();
     return deferred.promise;
@@ -88,6 +102,16 @@ function saveUserProfile(profile) {
 
 passport.use(new FacebookStrategy(facebookAuthParams,
   function(req, accessToken, refreshToken, profile, done) {
+
+    // console.log("##########################",req.user);
+    // console.log("##########################auth",req.isAuthenticated());
+    // console.log("##########################profile",profile);
+    console.log("new facebook Strategy");
+
+
+
+    // process.nextTick(function() {
+
 
         let userProfile = {};
 
@@ -110,18 +134,31 @@ passport.use(new FacebookStrategy(facebookAuthParams,
 
 
         saveUserProfile(userProfile).then(function(user) {
+
+
             if (_.isEmpty(user)) {
+                // console.log("-----------------isEmpty",user);
                 return done(null, false);
             }
+            console.log("-----------------notempty",user)
 
             return done(null, user);
 
+        },function(err){
+            return done(err,false);//check this
         });  
+
+    // });
+
+
+
   }
 ));
 
-app.use(passport.initialize());
-app.use(passport.session());
+
+
+
+
 
 function getUserInfo(fb_id) {
     var deferred = q.defer();
@@ -133,6 +170,7 @@ function getUserInfo(fb_id) {
         if (err) {
             deferred.reject(err);
         } else {
+
             deferred.resolve(result[0]);
         }
     });
@@ -140,21 +178,34 @@ function getUserInfo(fb_id) {
     return deferred.promise;
 }
 
+
 passport.serializeUser(function(req, user, done) {
 
-    console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",user);
+    console.log("serializeUser");
 
-    getUserInfo(user.fb_id).then(function(result) {
+  // console.log('serializeUserrrrrrr::::::::::::::::::::::::::::::::::::: req.user...' + JSON.stringify(req.user));
+  // console.log('serializeUserrrrrrr::::::::::::::::::::::::::::::::: user' + user.fb_id);
+  done(null, user.fb_id);
+});
+
+
+
+passport.deserializeUser(function(fb_id, done) {
+
+    // console.log('DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDd',fb_id);
+    console.log("deserializeUser");
+
+    getUserInfo(fb_id).then(function(result) {
         return done(null, result);
     }, function(err) {
+        return done(err,null);
         winston.error(err);
     });
-
 });
 
-passport.deserializeUser(function( user, done) {
-  done(null, user);
-});
+app.use(passport.initialize());
+app.use(passport.session());
+
 
 app.get('/auth/facebook', passport.authenticate('facebook', 
     {
@@ -166,9 +217,12 @@ app.get('/auth/facebook', passport.authenticate('facebook',
 app.get('/auth/facebook/callback', passport.authenticate('facebook', {
     successRedirect: config.facebookAuth.redirect,
     failureRedirect: config.facebookAuth.failureRedirect
-}));
+}))/*,function(req,res){
+    console.log("????????????????????",req.user);
+})*/;
 
 app.get('/loggedin', function(req, res) {
+    // console.log("$$$$$$$$$$$$$$$$$$$$$$$$$req.user is : ",req.user);
     res.send(req.isAuthenticated() ? req.user : false);
 });
 

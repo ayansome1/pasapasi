@@ -67,7 +67,7 @@ class App extends Component {
           <Switch>
           <Route path="/auth" component={Auth} />
           {/*<Route path="/checkout" component={RequireAuth(asyncCheckout)}/>*/}
-          <Route path="/home" exact component={RequireAuth(Home)}/>
+          <Route path="/" exact component={RequireAuth(Home)}/>
           <Route path="/profile" exact component={RequireAuth(Profile)}/>
           <Route path="/login" exact component={Login}/>
 

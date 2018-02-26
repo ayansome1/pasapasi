@@ -1,58 +1,86 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
+// import { connect } from 'react-redux';
+// import { Redirect } from 'react-router-dom';
+// import FacebookLogin from 'react-facebook-login';
 
-import Aux from '../../hoc/Aux/Aux';
-// import Burger from '../../components/Burger/Burger';
-// import BuildControls from '../../components/Burger/BuildControls/BuildControls';
-// import Modal from '../../components/UI/Modal/Modal';
-// import OrderSummary from '../../components/Burger/OrderSummary/OrderSummary';
+// import Input from '../../components/UI/Input/Input';
+// import Button from '../../components/UI/Button/Button';
 // import Spinner from '../../components/UI/Spinner/Spinner';
-import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
+// import classes from './Auth.css';
 // import * as actions from '../../store/actions/index';
-import axios from '../../axios-orders';
+// import { updateObject, checkValidity } from '../../shared/utility';
 
 class Login extends Component {
-    // constructor(props) {
-    //     super(props);
-    //     this.state = {...}
-    // }
-    state = {
-        // purchasing: false
+    // state = {};
+
+    componentDidMount() {
+        // if (this.props.authRedirectPath !== '/') {
+        //     this.props.onSetAuthRedirectPath();
+        // }
     }
 
-    componentDidMount () {
-        // this.props.onInitIngredients();
-    }
+    // responseFacebook = response => {
+    //     console.log(response);
+    // };
 
-   
-    render () {
-       
-      
+    // componentClicked = response => {
+    //     console.log(response);
+    // };
+
+    render() {
+        /*        if (this.props.loading) {
+            form = <Spinner />;
+        }*/
+
+        // let errorMessage = null;
+
+        // if (this.props.error) {
+        //     errorMessage = <p>{this.props.error.message}</p>;
+        // }
+
+        // let authRedirect = null;
+        // if (this.props.isAuthenticated) {
+        //     authRedirect = <Redirect to={this.props.authRedirectPath} />;
+        // }
+
         return (
-            <Aux>
-               this is login page
-            </Aux>
+            <div>
+                <a href={"http://localhost/pasapasi/api/auth/facebook"}>
+                    login with facebook
+                </a>
+
+            </div>
+
+            /*<div className={classes.Auth}>
+                {authRedirect}
+                {errorMessage}
+                <form onSubmit={this.submitHandler}>
+                    {form}
+                    <Button btnType="Success">SUBMIT</Button>
+                </form>
+                <Button
+                    clicked={this.switchAuthModeHandler}
+                    btnType="Danger">SWITCH TO {this.state.isSignup ? 'SIGNIN' : 'SIGNUP'}</Button>
+            </div>*/
         );
     }
 }
 
-const mapStateToProps = state => {
-    return {
-        // ings: state.burgerBuilder.ingredients,
-        // price: state.burgerBuilder.totalPrice,
-        // error: state.burgerBuilder.error,
-        // isAuthenticated: state.auth.token !== null
-    };
-}
+// const mapStateToProps = state => {
+//     return {
+//         //loading: state.auth.loading,
+//         //error: state.auth.error,
+//         //isAuthenticated: state.auth.token !== null,
+//         //buildingBurger: state.burgerBuilder.building,
+//         //authRedirectPath: state.auth.authRedirectPath
+//     };
+// };
 
-const mapDispatchToProps = dispatch => {
-    return {
-        // onIngredientAdded: (ingName) => dispatch(actions.addIngredient(ingName)),
-        // onIngredientRemoved: (ingName) => dispatch(actions.removeIngredient(ingName)),
-        // onInitIngredients: () => dispatch(actions.initIngredients()),
-        // onInitPurchase: () => dispatch(actions.purchaseInit()),
-        // onSetAuthRedirectPath: (path) => dispatch(actions.setAuthRedirectPath(path))
-    }
-}
+// const mapDispatchToProps = dispatch => {
+//     return {
+//         //onAuth: (email, password, isSignup) => dispatch(actions.auth(email, password, isSignup)),
+//         //onSetAuthRedirectPath: () => dispatch(actions.setAuthRedirectPath('/')),
+//     };
+// };
 
-export default connect(mapStateToProps, mapDispatchToProps)(withErrorHandler( Login, axios ));
+export default Login;//connect(mapStateToProps, mapDispatchToProps)(Auth);
