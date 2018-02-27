@@ -14,7 +14,8 @@ import authReducer from './store/reducers/auth';
 
 import axios from 'axios';
 
-axios.defaults.baseUrl = "http://localhost/pasapasi/api";
+axios.defaults.baseURL = "http://localhost/pasapasi/api";
+axios.defaults.withCredentials = true;
 
 const composeEnhancers = process.env.NODE_ENV === 'development' ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ : null || compose;
 

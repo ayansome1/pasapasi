@@ -9,7 +9,7 @@ import Aux from '../../hoc/Aux/Aux';
 // import Spinner from '../../components/UI/Spinner/Spinner';
 import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
 // import * as actions from '../../store/actions/index';
-import axios from '../../axios-orders';
+import axios from 'axios';
 
 class Home extends Component {
     // constructor(props) {

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Redirect } from 'react-router-dom';
 
-import axios from '../../axios-orders';
+import axios from 'axios';
 
 const RequireAuth = (Component) => { 
 
