@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import { Route, Switch} from 'react-router-dom';
+import { Route, Switch,BrowserRouter,Redirect} from 'react-router-dom';
 
 
-import Layout from './hoc/Layout/Layout';
+// import Layout from './hoc/Layout/Layout';
 import RequireAuth from './hoc/RequireAuth/RequireAuth';
 
 import Home from './containers/Home/Home';
@@ -44,7 +44,18 @@ class App extends Component {
 
     return (
       <div>
-        this is app.js
+            <BrowserRouter>
+                <Switch>
+                    <Route path='/profile' component={RequireAuth(Profile) } />
+                    <Route path="/login" component={Login}/>
+                    <Route path='/' component={ RequireAuth(Home) } />
+
+                    {/*<Redirect from='*' to='/' />*/}
+                </Switch>
+            </BrowserRouter>
+
+
+
 {/*        <Layout>
           <Switch>
             <Route path="/" component={RequireAuth(Home)}/>
