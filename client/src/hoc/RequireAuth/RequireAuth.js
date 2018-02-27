@@ -13,9 +13,14 @@ const RequireAuth = (Component) => {
 
         componentDidMount() {
             console.log("mounting");
-            axios.get('/loggedin').then((user) => {
-              console.log("********logged in user",user);
+            axios.get('/loggedin').then((res) => {
+              console.log("********logged in user",res.data);
+              if(res.data !== false){
                 this.setState({isAuthenticated: true, isLoading: false});
+              }
+              else{
+                this.setState({isLoading: false});
+              }
             }).catch(() => {
                 this.setState({isLoading: false});
             });

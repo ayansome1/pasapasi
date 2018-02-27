@@ -44,28 +44,16 @@ class App extends Component {
 
     return (
       <div>
-          home profile logout
             <BrowserRouter>
                 <Switch>
                     <Layout>
-                    <Route path='/profile' component={RequireAuth(Profile) } />
-                    <Route path="/login" component={Login}/>
+                      <Route path='/' exact component={ RequireAuth(Home) } />
+                      <Route path='/profile' exact component={RequireAuth(Profile) } />
+                      <Route path="/login" exact component={Login}/>
                     </Layout>
-                    <Route path='/' component={ RequireAuth(Home) } />
 
-                    {/*<Redirect from='*' to='/' />*/}
                 </Switch>
             </BrowserRouter>
-
-
-
-{/*        <Layout>
-          <Switch>
-            <Route path="/" component={RequireAuth(Home)}/>
-            <Route path="/profile" exact component={RequireAuth(Profile)}/>
-            <Route path="/login" exact component={Login}/>
-         </Switch>
-        </Layout>*/}
       </div>
     );
 

@@ -11,15 +11,20 @@ class Login extends Component {
         isLoading: true
     }
 
-     componentDidMount() {
-        console.log("mounting");
-        axios.get('/loggedin').then((user) => {
-          console.log("********logged in user",user);
-            this.setState({isAuthenticated: true, isLoading: false});
-        }).catch(() => {
-            this.setState({isLoading: false});
-        });
-    } 
+        componentDidMount() {
+            console.log("mounting");
+            axios.get('/loggedin').then((res) => {
+              console.log("********logged in user",res.data);
+              if(res.data !== false){
+                this.setState({isAuthenticated: true, isLoading: false});
+              }
+              else{
+                this.setState({isLoading: false});
+              }
+            }).catch(() => {
+                this.setState({isLoading: false});
+            });
+        }
 
     render() {
 
@@ -27,13 +32,15 @@ class Login extends Component {
 
            const { isAuthenticated, isLoading } = this.state;
            if(isLoading) {
-            console.log("loading before redirect")
+            console.log("login::::::::::loading before redirect")
 
                return <div>Loading...</div>
            }
 
 
            if(!isAuthenticated) {
+            console.log("login::::::::::not Authenticated");
+
    		        return (
 		            <div>
 		                <a href={"http://localhost/pasapasi/api/auth/facebook"}>
@@ -47,6 +54,8 @@ class Login extends Component {
 
            }
            else{
+            console.log("login::::::::::Authenticated");
+
            		return <Redirect to="/" />
            }
 
