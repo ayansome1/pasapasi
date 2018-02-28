@@ -12,7 +12,6 @@ class Login extends Component {
     }
 
         componentDidMount() {
-            console.log("mounting");
             axios.get('/loggedin').then((res) => {
               console.log("********logged in user",res.data);
               if(res.data !== false){
@@ -27,20 +26,13 @@ class Login extends Component {
         }
 
     render() {
-
-           console.log("mounting");
-
            const { isAuthenticated, isLoading } = this.state;
            if(isLoading) {
-            console.log("login::::::::::loading before redirect")
-
                return <div>Loading...</div>
            }
 
 
            if(!isAuthenticated) {
-            console.log("login::::::::::not Authenticated");
-
    		        return (
 		            <div>
 		                <a href={"http://localhost/pasapasi/api/auth/facebook"}>
@@ -48,17 +40,11 @@ class Login extends Component {
 		                </a>
 
 		            </div>
-
-
-		        );
-
+  		        );
            }
            else{
-            console.log("login::::::::::Authenticated");
-
            		return <Redirect to="/" />
            }
-
     }
 }
 
