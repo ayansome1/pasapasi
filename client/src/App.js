@@ -13,35 +13,10 @@ import Login from './containers/Login/Login';
 class App extends Component {
 
   componentDidMount () {
-    // this.props.onTryAutoSignup();
+
   }
 
   render () {
-
-    console.log("called");
-
-
-    // let routes = (
-    //   <Switch>
-    //     <Route path="/auth" component={asyncAuth} />
-    //     <Route path="/" exact component={BurgerBuilder} />
-    //     <Redirect to="/" />
-    //   </Switch>
-    // );
-
-    // if ( this.props.isAuthenticated ) {
-    //   routes = (
-    //     <Switch>
-    //       <Route path="/checkout" component={asyncCheckout} />
-    //       <Route path="/orders" component={asyncOrders} />
-    //       <Route path="/logout" component={Logout} />
-    //       <Route path="/auth" component={asyncAuth} />
-    //       <Route path="/" exact component={BurgerBuilder} />
-    //       <Redirect to="/" />
-    //     </Switch>
-    //   );
-    // }
-
     return (
       <div>
             <BrowserRouter>
