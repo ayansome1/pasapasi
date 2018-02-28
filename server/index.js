@@ -171,15 +171,15 @@ function getUserInfo(fb_id) {
 
 passport.serializeUser(function(req, user, done) {
 
-    done(null, user.fb_id);
+    done(null, user.user_id);
 
 });
 
 
 
-passport.deserializeUser(function(fb_id, done) {
+passport.deserializeUser(function(user_id, done) {
 
-    getUserInfo(fb_id).then(function(result) {
+    getUserInfo(user_id).then(function(result) {
         return done(null, result);
     }, function(err) {
         return done(err,null);
@@ -246,8 +246,8 @@ function auth() {
     };
 }
 
-// let pasapasiRoutes = require('./routes/pasapasi-server-routes.js');
-// pasapasiRoutes(app,auth);
+let pasapasiRoutes = require('./routes/pasapasi-server-routes.js');
+pasapasiRoutes(app,auth);
 
 
 let server = http.createServer(app);
