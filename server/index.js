@@ -32,7 +32,12 @@ let facebookAuthParams = {
     passReqToCallback: true
 };
 
-
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "http://localhost:3000");
+  res.header("Access-Control-Allow-Credentials",true);
+  // res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
 
 app.use(session({
     secret: config.sessionSecret,
@@ -50,12 +55,7 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use(function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "http://localhost:3000");
-  res.header("Access-Control-Allow-Credentials",true);
-  // res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  next();
-});
+
 
 
 
@@ -154,7 +154,7 @@ function getUserInfo(fb_id) {
     var deferred = q.defer();
     var connection = mysql.createConnection(connInfo);
 
-    var query = "Select * from users where fb_id = ?;";
+    var query = "Select * from users where user_id = ?;";
 
     connection.query(query, [fb_id], function(err, result) {
         if (err) {
@@ -170,6 +170,8 @@ function getUserInfo(fb_id) {
 
 
 passport.serializeUser(function(req, user, done) {
+
+    console.log(",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,",user);
 
     done(null, user.user_id);
 
