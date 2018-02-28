@@ -16,7 +16,7 @@ class Main extends Component {
                 <Switch>
                     <Layout>
                       <Route path='/' exact component={ RequireAuth(Home) } />
-                      <Route path='profile' exact component={RequireAuth(Profile) } />
+                      <Route path='/profile' exact component={RequireAuth(Profile) } />
                     </Layout>
                 </Switch>
             </BrowserRouter>
