@@ -8,12 +8,15 @@ class Home extends Component {
 
 	componentDidMount(){
 
-		let userLatitude,userLongitude;
+	/*	let userLatitude,userLongitude;
 
 		const locationCoordinates = (position) => {
 
 			userLatitude = position.coords.latitude;
 			userLongitude = position.coords.longitude;
+
+			console.log(userLatitude,userLongitude);
+
 
 
 
@@ -35,31 +38,59 @@ class Home extends Component {
 				// 			loadingLocation:false,
 				// 			lat:position.coords.latitude,
 				// 			lng:position.coords.longitude});
-		};
+		};*/
 
 		const getLocation = () => {
-		    if (navigator.geolocation) {
+
+			return new Promise((resolve,reject)=>{
+				navigator.geolocation.getCurrentPosition((data)=> {
+			    	resolve(data.coords);
+			    },(err)=>{
+			    	reject(err);
+			    });
+
+			});
+
+		    
+
+/*		    if (navigator.geolocation) {
 		        navigator.geolocation.getCurrentPosition(locationCoordinates);
 		    } else { 
 				// this.setState({loadingLocation:false,locationAvailability:false});
 		    	console.log("Geolocation is not supported by this browser.");
-		    }
+		    }*/
 		}
 
 
 		const getNearByPeople = () => {
 
-			getLocation();
+			getLocation().then((data)=>{
 
-			if(userLatitude && userLongitude){
-				axios.get('/nearby-people/lat/'+userLatitude+"/lng/"+userLatitude).then((data)=>{
+				console.log(data);
+
+				axios.get('/nearby-people/lat/'+data.latitude+"/lng/"+data.longitude).then((data)=>{
 					console.log("nearby people: ",data);
 
 				}).catch((err)=>{
 					console.log("error in getting nearby people");
 
 				});
-			}
+
+
+				console.log(data);
+			});
+
+			// console.log(userLatitude,userLongitude);
+
+			// if(userLatitude && userLongitude){
+			// 	axios.get('/nearby-people/lat/'+userLatitude+"/lng/"+userLatitude).then((data)=>{
+			// 		console.log("nearby people: ",data);
+
+			// 	}).catch((err)=>{
+			// 		console.log("error in getting nearby people");
+
+			// 	});
+			// }
 			
 		}
 

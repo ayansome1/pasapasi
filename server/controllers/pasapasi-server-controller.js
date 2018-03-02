@@ -7,10 +7,9 @@ let winston = require('winston');
 let connInfo = config.sqlconn;
 connInfo.multipleStatements = true;
 
-let updateUserLocation = (req,res) => {
+let updateUserLocation = (lat,lng,userId) => {
 
-  let data = req.body;
-  console.log("***********************",data);
+  let deferred= q.defer();
   let params = [];
   let connection = mysql.createConnection(connInfo);
   let query = `insert into location (user_id,lat,lng,last_active)
@@ -20,17 +19,18 @@ let updateUserLocation = (req,res) => {
                lat=values(lat),
                lng=values(lng),
                last_active=values(last_active);`;
-  params.push(req.user.user_id,data.lat,data.lng);
+  params.push(userId,lat,lng);
 
   connection.query(query,params, (err, results) => {
     if (err) {
       winston.error(err);
-      res.status(500).send(err);
+      deferred.reject(err);
     } else {
-      res.status(200).send();
+      deferred.resolve()
     }
   });
   connection.end();
+  return deferred.promise;
 };
 
 let getUserPreference = (user_id) => {
@@ -46,26 +46,48 @@ let getUserPreference = (user_id) => {
       deferred.reject(err);
     } else {
       console.log("user_preference for " + user_id + " is : " + results + "\n\n");
-      deferred.resolve(results);
+      if(results){
+        deferred.resolve(results[0]);
+      }
+      else{
+        deferred.resolve(null);
+      }
     }
   });
   connection.end();
   return deferred.promise;
 }
 
-let nearByPeople = (user_id) => {
+let nearByPeople = (lat,lng,userId,genderPreference) => {
 
   let deferred = q.defer();
 
   let connection = mysql.createConnection(connInfo);
-  let query = `select * from user_preference where user_id = ?;`;
+  let params = [];
+  let query = `SELECT 
+                users.user_id,location.last_active,users.first_name,users.fb_link,users.gender ,
+                (
+                   6371 *
+                   acos(cos(radians(?)) * 
+                   cos(radians(lat)) * 
+                   cos(radians(lng) - 
+                   radians(?)) + 
+                   sin(radians(?)) * 
+                   sin(radians(lat )))
+                ) AS distance 
+                FROM location inner join users on users.user_id=location.user_id
+                HAVING distance < 2 and
+                users.gender=? and user_id != ? 
+                ORDER BY distance;`;
+    params.push(lat,lng,lat,genderPreference,userId);
 
-  connection.query(query,[user_id], (err, results) => {
+  let sql = connection.query(query,params, (err, results) => {
+
+    console.log(sql.sql);
     if (err) {
       winston.error(err);
       deferred.reject(err);
     } else {
-      console.log("user_preference for " + user_id + " is : " + results + "\n\n");
       deferred.resolve(results);
     }
   });
@@ -76,12 +98,37 @@ let nearByPeople = (user_id) => {
 
 let getNearByPeople = (req,res) => {
 
-  getUserPreference(req.user.user_id).then((data)=>{
+  let lat = req.params.lat;
+  let lng = req.params.lng;
+
+  updateUserLocation(lat,lng,req.user.user_id).then(()=>{
+
+    return getUserPreference(req.user.user_id);
+
+  }).then((data)=>{
+
+    let genderPreference;
+
+    if(data){
+      genderPreference = data.preferred_gender;
+    }
+    else if (req.user.gender==='M'){
+      genderPreference = 'F';
+    }
+    else{
+      genderPreference = 'M';
+    }
+
+    return nearByPeople(lat,lng,req.user.user_id,genderPreference);
+
+    // console.log("**********************",data);
+    // res.send(data);
+
+    // console.log("user_preference:",data);
+
+  }).then((data)=>{
 
     res.send(data);
-
-    console.log("user_preference:",data);
-
   },(err)=>{
     winston.error(err);
     res.status.send(err);
@@ -91,6 +138,6 @@ let getNearByPeople = (req,res) => {
 
 
 module.exports = {
-  updateUserLocation,
+  // updateUserLocation,
   getNearByPeople
 };
