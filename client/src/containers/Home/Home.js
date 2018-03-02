@@ -8,45 +8,125 @@ class Home extends Component {
 
 	componentDidMount(){
 
-		const updateUserLocation = (lat,lng) => {
-			return new Promise((resolve, reject) => {
-					axios.post('/location',{lat:lat,lng:lng}).then(()=>{
-						console.log("location updated in db");
-						resolve();
-					}).catch((err)=>{
-						console.log("error in updating user location in db");
-						reject(err);
-					});
-					
-			});
-		}
+		let userLatitude,userLongitude;
+
+		const locationCoordinates = (position) => {
+
+			userLatitude = position.coords.latitude;
+			userLongitude = position.coords.longitude;
 
 
-		const showPosition = (position) => {
 
-			updateUserLocation(position.coords.latitude,position.coords.longitude).then(()=>{
-				console.log("$$$$$$$updated user location");
 
-			},(err)=>{
-				console.log("$$$$$$$$$error in updating user location");
-			});
+			// updateUserLocation(position.coords.latitude,position.coords.longitude).then(()=>{
+			// 	console.log("$$$$$$$updated user location");
 
-			 this.setState({locationAvailability:true,
-							loadingLocation:false,
-							lat:position.coords.latitude,
-							lng:position.coords.longitude});
+			// 	return getNearByPeople(position.coords.latitude,position.coords.longitude);
+
+			// }).then((data)=>{
+
+			// 	console.log(data);
+
+			// },(err)=>{
+			// 	console.log("$$$$$$$$$error in updating user location");
+			// });
+
+			 // this.setState({locationAvailability:true,
+				// 			loadingLocation:false,
+				// 			lat:position.coords.latitude,
+				// 			lng:position.coords.longitude});
 		};
 
-		 const getLocation = () => {
+		const getLocation = () => {
 		    if (navigator.geolocation) {
-		        navigator.geolocation.getCurrentPosition(showPosition);
+		        navigator.geolocation.getCurrentPosition(locationCoordinates);
 		    } else { 
-				this.setState({loadingLocation:false,locationAvailability:false});
+				// this.setState({loadingLocation:false,locationAvailability:false});
 		    	console.log("Geolocation is not supported by this browser.");
 		    }
 		}
 
-		getLocation();
+
+		const getNearByPeople = () => {
+
+			getLocation();
+
+			if(userLatitude && userLongitude){
+				axios.get('/nearby-people/lat/'+userLatitude+"/lng/"+userLatitude).then((data)=>{
+					console.log("nearby people: ",data);
+
+				}).catch((err)=>{
+					console.log("error in getting nearby people");
+
+				});
+			}
+			
+		}
+
+		getNearByPeople();
+
+
+
+
+
+
+		// const updateUserLocation = (lat,lng) => {
+		// 	return new Promise((resolve, reject) => {
+		// 			axios.post('/location',{lat:lat,lng:lng}).then(()=>{
+		// 				console.log("location updated in db");
+		// 				resolve();
+		// 			}).catch((err)=>{
+		// 				console.log("error in updating user location in db");
+		// 				reject(err);
+		// 			});
+					
+		// 	});
+		// }
+
+		// const showPosition = (position) => {
+
+		// 	updateUserLocation(position.coords.latitude,position.coords.longitude).then(()=>{
+		// 		console.log("$$$$$$$updated user location");
+
+		// 		return getNearByPeople(position.coords.latitude,position.coords.longitude);
+
+		// 	}).then((data)=>{
+
+		// 		console.log(data);
+
+		// 	},(err)=>{
+		// 		console.log("$$$$$$$$$error in updating user location");
+		// 	});
+
+		// 	 this.setState({locationAvailability:true,
+		// 					loadingLocation:false,
+		// 					lat:position.coords.latitude,
+		// 					lng:position.coords.longitude});
+		// };
+
+
+
+		// const showPosition = (position) => {
+
+		// 	updateUserLocation(position.coords.latitude,position.coords.longitude).then(()=>{
+		// 		console.log("$$$$$$$updated user location");
+
+		// 	},(err)=>{
+		// 		console.log("$$$$$$$$$error in updating user location");
+		// 	});
+
+		// 	 this.setState({locationAvailability:true,
+		// 					loadingLocation:false,
+		// 					lat:position.coords.latitude,
+		// 					lng:position.coords.longitude});
+		// };
+
+
+
+
+
+
+
 	}
 
     render () {

@@ -53,17 +53,44 @@ let getUserPreference = (user_id) => {
   return deferred.promise;
 }
 
-let fetchNearByPeople = (req,res) => {
+let nearByPeople = (user_id) => {
+
+  let deferred = q.defer();
+
+  let connection = mysql.createConnection(connInfo);
+  let query = `select * from user_preference where user_id = ?;`;
+
+  connection.query(query,[user_id], (err, results) => {
+    if (err) {
+      winston.error(err);
+      deferred.reject(err);
+    } else {
+      console.log("user_preference for " + user_id + " is : " + results + "\n\n");
+      deferred.resolve(results);
+    }
+  });
+  connection.end();
+  return deferred.promise;
+
+}
+
+let getNearByPeople = (req,res) => {
 
   getUserPreference(req.user.user_id).then((data)=>{
 
-  },(err)=>{
+    res.send(data);
 
+    console.log("user_preference:",data);
+
+  },(err)=>{
+    winston.error(err);
+    res.status.send(err);
   });
 
 }
 
 
 module.exports = {
-  updateUserLocation
+  updateUserLocation,
+  getNearByPeople
 };
