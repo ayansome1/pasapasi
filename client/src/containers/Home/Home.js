@@ -40,6 +40,9 @@ class Home extends Component {
 	}
 
 	render() {
+
+
+
 		if (this.state.loading) {
 			return <div>Loading...</div>;
 		} else {
@@ -52,11 +55,11 @@ class Home extends Component {
 							fb profile
 						</a>
 						<br />
-						{item.distance}
+						{item.distance.toFixed(2)} km away
 						<br />
 						{item.gender}
 						<br />
-						<Moment fromNow ago>{item.last_active}</Moment> ago
+						Last active : <Moment fromNow ago>{item.last_active}</Moment> ago
 						
 					</div>
 				);
