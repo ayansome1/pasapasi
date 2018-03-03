@@ -83,7 +83,7 @@ let nearByPeople = (lat,lng,userId,genderPreference) => {
 
   let sql = connection.query(query,params, (err, results) => {
 
-    console.log(sql.sql);
+    // console.log(sql.sql);
     if (err) {
       winston.error(err);
       deferred.reject(err);
