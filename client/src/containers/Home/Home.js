@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import { Bootstrap, Grid, Row, Col } from 'react-bootstrap';
 
 class Home extends Component {
 	state = { loading: true };
@@ -41,22 +42,59 @@ class Home extends Component {
 		if (this.state.loading) {
 			return <div>Loading...</div>;
 		} else {
-			return this.state.people.map((item, index) => {
-				return(<div key={index}>
-					
-					{item.first_name}
-					<br/>
-					<a href={item.fb_link} target="_blank">fb profile</a>
-					<br/>
-					{item.distance}
-					<br/>
-					{item.gender}
-					<br/>
-					{item.last_active}
-					
 
-				</div>);
-			});
+			return (
+				<Grid>
+							
+						{this.state.people.map((item, index) => {
+							
+									return <Row className="show-grid">
+										<Col xs={12} sm={6} key={index}>
+											{item.first_name}
+											<br />
+											<a href={item.fb_link} target="_blank">
+												fb profile
+											</a>
+											<br />
+											{item.distance}
+											<br />
+											{item.gender}
+											<br />
+											{item.last_active}
+										</Col>
+									</Row>
+						})}
+
+
+
+
+				</Grid>
+			);
+
+			/*return this.state.people.map((item, index) => {
+				return (
+					<Grid>
+						<Row className="show-grid">
+							<Col xs={3} sm={3} key={index}>
+								{item.first_name}
+								<br />
+								<a href={item.fb_link} target="_blank">
+									fb profile
+								</a>
+								<br />
+								{item.distance}
+								<br />
+								{item.gender}
+								<br />
+								{item.last_active}
+							</Col>
+						</Row>
+					</Grid>
+				);
+			});*/
+
+
+
 		}
 	}
 }
