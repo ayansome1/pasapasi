@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import Moment from 'react-moment';
+import 'moment-timezone';
 
 class Home extends Component {
 	state = { loading: true };
@@ -54,7 +56,8 @@ class Home extends Component {
 						<br />
 						{item.gender}
 						<br />
-						{item.last_active}
+						<Moment fromNow ago>{item.last_active}</Moment> ago
+						
 					</div>
 				);
 			});
