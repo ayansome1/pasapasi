@@ -41,11 +41,22 @@ class Home extends Component {
 		if (this.state.loading) {
 			return <div>Loading...</div>;
 		} else {
-			return (
-				<div>
-					{this.state.people[0].first_name}
-				</div>
-			);
+			return this.state.people.map((item, index) => {
+				return(<div key={index}>
+					
+					{item.first_name}
+					<br/>
+					<a href={item.fb_link} target="_blank">fb profile</a>
+					<br/>
+					{item.distance}
+					<br/>
+					{item.gender}
+					<br/>
+					{item.last_active}
+					
+
+				</div>);
+			});
 		}
 	}
 }

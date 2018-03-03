@@ -76,7 +76,7 @@ let nearByPeople = (lat,lng,userId,genderPreference) => {
                    sin(radians(lat )))
                 ) AS distance 
                 FROM location inner join users on users.user_id=location.user_id
-                HAVING distance < 2 and
+                HAVING distance < 20 and
                 users.gender=? and user_id != ? 
                 ORDER BY distance;`;
     params.push(lat,lng,lat,genderPreference,userId);
