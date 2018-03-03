@@ -60,6 +60,8 @@ class Home extends Component {
 						{item.gender}
 						<br />
 						Last active : <Moment fromNow ago>{item.last_active}</Moment> ago
+						<br/>
+						<img src={"https://graph.facebook.com/100001079274737/picture?height=100&width=100"}/> 
 						
 					</div>
 				);

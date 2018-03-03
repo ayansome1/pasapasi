@@ -109,6 +109,10 @@ function saveUserProfile(profile) {
 passport.use(new FacebookStrategy(facebookAuthParams,
   function(req, accessToken, refreshToken, profile, done) {
 
+
+
+        console.log("\n\n\nprofile--------------------",profile,"\n\n\n");
+
         let userProfile = {};
 
         userProfile.email = profile._json.email || null;
@@ -191,7 +195,8 @@ passport.deserializeUser(function(user_id, done) {
 
 app.get('/auth/facebook', passport.authenticate('facebook', 
     {
-        scope: ['user_friends', 'email', 'public_profile']
+        authType: 'rerequest',
+        scope: ['user_friends', 'email', 'public_profile','user_photos']
     }
 
 ));
