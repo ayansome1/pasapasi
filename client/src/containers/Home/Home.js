@@ -40,6 +40,13 @@ class Home extends Component {
 
 		this.likedHandler = (likedUserId) =>{
 			console.log("like clicked",likedUserId);
+			axios
+			.post('/like/'+likedUserId)
+			.then(response=>{
+				console.log("liked");
+			}).catch(err=>{
+				console.log('error in updating like');
+			});
 		}
 	}
 

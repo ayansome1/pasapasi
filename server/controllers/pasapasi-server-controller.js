@@ -134,31 +134,33 @@ let getNearByPeople = (req,res) => {
     res.send({nearByPeople:data[0],likeHistory:data[1]});
   },(err)=>{
     winston.error(err);
-    res.status.send(err);
+    res.status(500).send(err);
   });
 
 }
 let likeUser = (req,res) => {
 
-  // let connection = mysql.createConnection(connInfo);
-  // let query = `select * from user_preference where user_id = ?;`;
+  let likedUserId = parseInt(req.params.userId);
 
-  // connection.query(query,[user_id], (err, results) => {
-  //   if (err) {
-  //     winston.error(err);
-  //     deferred.reject(err);
-  //   } else {
-  //     console.log("user_preference for " + user_id + " is : " + results + "\n\n");
-  //     if(results){
-  //       deferred.resolve(results[0]);
-  //     }
-  //     else{
-  //       deferred.resolve(null);
-  //     }
-  //   }
-  // });
-  // connection.end();
-  // return deferred.promise;
+  let connection = mysql.createConnection(connInfo);
+  let query =  `insert into people(user_id,people_liked) 
+                values(?,'[?]')
+                on duplicate key update
+                people_liked=JSON_ARRAY_APPEND(people_liked,'$',?);
+                `;
+  let params = [req.user.user_id,likedUserId,likedUserId];
+
+  let sql=connection.query(query,params, (err, results) => {
+      console.log(sql.sql);
+
+    if (err) {
+      winston.error(err);
+      res.status(500).send(err);
+    } else {
+      res.send();
+    }
+  });
+  connection.end();
 
 }
 
