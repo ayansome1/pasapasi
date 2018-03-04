@@ -62,7 +62,11 @@ class Home extends Component {
 						Last active : <Moment fromNow ago>{item.last_active}</Moment> ago
 						<br/>
 						<img src={"https://graph.facebook.com/" + item.fb_id + "/picture?height=100&width=100"}/> 
-						
+						<br/>
+						<i className="fa fa-heart"></i>
+						<i className="fa fa-heart-o"></i>
+
+
 					</div>
 				);
 			});
