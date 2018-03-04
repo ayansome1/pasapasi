@@ -37,6 +37,10 @@ class Home extends Component {
 		};
 
 		getNearByPeople();
+
+		this.likedHandler = (likedUserId) =>{
+			console.log("like clicked",likedUserId);
+		}
 	}
 
 	render() {
@@ -63,7 +67,7 @@ class Home extends Component {
 						<br/>
 						<img src={"https://graph.facebook.com/" + item.fb_id + "/picture?height=100&width=100"}/> 
 						<br/>
-						<i className="fa fa-heart"></i>
+						<i className="fa fa-heart" onClick={() => this.likedHandler(item.user_id)}></i>
 						<i className="fa fa-heart-o"></i>
 
 
