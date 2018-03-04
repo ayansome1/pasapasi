@@ -131,7 +131,16 @@ let getNearByPeople = (req,res) => {
 
   }).then((data)=>{
 
-    res.send({nearByPeople:data[0],likeHistory:data[1]});
+
+    let results = {nearByPeople:data[0]};
+    if(data[1][0]){
+      results.likeHistory = data[1][0];
+    }
+    else{
+      results.likeHistory = null;
+    }
+
+    res.send(results);
   },(err)=>{
     winston.error(err);
     res.status(500).send(err);

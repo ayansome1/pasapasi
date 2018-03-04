@@ -28,7 +28,16 @@ class Home extends Component {
 					.get('/nearby-people/lat/' + data.latitude + '/lng/' + data.longitude)
 					.then(response => {
 						console.log('nearby people: ', response.data);
-						this.setState({ loading: false, people: response.data.nearByPeople });
+						this.setState({ loading: false, 
+										people: response.data.nearByPeople});
+						if(response.data.likeHistory){
+							this.setState({likedPeople: JSON.parse(response.data.likeHistory.people_liked),
+										   dislikedPeople: JSON.parse(response.data.likeHistory.people_disliked )});
+						}
+						else{
+				              this.setState({likedPeople: [],
+						 			    	  dislikedPeople: [] })
+						}
 					})
 					.catch(err => {
 						console.log('error in getting nearby people');
@@ -64,6 +73,25 @@ class Home extends Component {
 	render() {
 
 
+		let getLikeIcon =(user_id)=>{
+
+			console.log(user_id);
+
+
+			if( this.state.dislikedPeople && this.state.dislikedPeople.indexOf(user_id)>-1 ){
+				return (<i className="fa fa-heart-o" onClick={() => this.likedHandler(user_id)}></i>);
+			}
+
+			else if( this.state.likedPeople && this.state.likedPeople.indexOf(user_id)>-1 ){
+				return (<i className="fa fa-heart" onClick={() => this.dislikedHandler(user_id)}></i>);
+			}
+			else{
+				return (<i className="fa fa-heart-o" onClick={() => this.likedHandler(user_id)}></i>);
+
+			}
+		}
+
+
 
 		if (this.state.loading) {
 			return <div>Loading...</div>;
@@ -85,9 +113,10 @@ class Home extends Component {
 						<br/>
 						<img src={"https://graph.facebook.com/" + item.fb_id + "/picture?height=100&width=100"}/> 
 						<br/>
-						<i className="fa fa-heart" onClick={() => this.likedHandler(item.user_id)}></i>
+						{getLikeIcon(item.user_id)}
+			{/*			<i className="fa fa-heart" onClick={() => this.likedHandler(item.user_id)}></i>
 						<i className="fa fa-heart-o" onClick={() => this.dislikedHandler(item.user_id)}></i>
-
+*/}
 
 					</div>
 				);
