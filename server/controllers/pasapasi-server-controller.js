@@ -138,9 +138,32 @@ let getNearByPeople = (req,res) => {
   });
 
 }
+let likeUser = (req,res) => {
 
+  // let connection = mysql.createConnection(connInfo);
+  // let query = `select * from user_preference where user_id = ?;`;
+
+  // connection.query(query,[user_id], (err, results) => {
+  //   if (err) {
+  //     winston.error(err);
+  //     deferred.reject(err);
+  //   } else {
+  //     console.log("user_preference for " + user_id + " is : " + results + "\n\n");
+  //     if(results){
+  //       deferred.resolve(results[0]);
+  //     }
+  //     else{
+  //       deferred.resolve(null);
+  //     }
+  //   }
+  // });
+  // connection.end();
+  // return deferred.promise;
+
+}
 
 module.exports = {
   // updateUserLocation,
-  getNearByPeople
+  getNearByPeople,
+  likeUser
 };
