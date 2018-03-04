@@ -7,7 +7,10 @@ class NavigationItems extends Component {
 
 
   logout = (event) => {
+
+
   	axios.get('/logout').then(()=>{
+      // localStorage.removeItem('user_fb_id');
   		window.location = "/login";
   	}).catch(()=>{
   		console.log("ERROR");

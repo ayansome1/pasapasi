@@ -15,6 +15,12 @@ const RequireAuth = (Component) => {
             console.log("mounting");
             axios.get('/loggedin').then((res) => {
               console.log("********logged in user",res.data);
+
+              // if(!localStorage.getItem('user_fb_id')){
+              //   localStorage.setItem('user_fb_id', res.data.fb_id);
+              // }
+
+
               if(res.data !== false){
                 this.setState({isAuthenticated: true, isLoading: false});
               }

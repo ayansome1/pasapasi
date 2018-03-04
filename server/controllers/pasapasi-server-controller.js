@@ -65,7 +65,7 @@ let nearByPeople = (lat,lng,userId,genderPreference) => {
   let connection = mysql.createConnection(connInfo);
   let params = [];
   let query = `SELECT 
-                users.user_id,location.last_active,users.first_name,users.fb_link,users.gender ,
+                users.user_id,users.fb_id,location.last_active,users.first_name,users.fb_link,users.gender ,
                 (
                    6371 *
                    acos(cos(radians(?)) * 
