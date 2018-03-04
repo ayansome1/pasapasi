@@ -143,12 +143,54 @@ let likeUser = (req,res) => {
   let likedUserId = parseInt(req.params.userId);
 
   let connection = mysql.createConnection(connInfo);
+
   let query =  `insert into people(user_id,people_liked) 
-                values(?,'[?]')
+                values(?,COALESCE(JSON_ARRAY_APPEND(people_liked, '$', ?), JSON_ARRAY(?)))
                 on duplicate key update
-                people_liked=JSON_ARRAY_APPEND(people_liked,'$',?);
-                `;
-  let params = [req.user.user_id,likedUserId,likedUserId];
+                people_liked=COALESCE(JSON_ARRAY_APPEND(people_liked, '$', ?), JSON_ARRAY(?));
+              `;
+  let params = [req.user.user_id,likedUserId,likedUserId,likedUserId,likedUserId];
+
+
+  // let query =  `insert into people(user_id,people_liked) 
+  //               values(?,'[?]')
+  //               on duplicate key update
+  //               people_liked=JSON_ARRAY_APPEND(people_liked,'$',?);
+  //               `;
+  // let params = [req.user.user_id,likedUserId,likedUserId];
+
+  let sql=connection.query(query,params, (err, results) => {
+      console.log(sql.sql);
+
+    if (err) {
+      winston.error(err);
+      res.status(500).send(err);
+    } else {
+      res.send();
+    }
+  });
+  connection.end();
+
+}
+
+let dislikeUser = (req,res) => {
+
+  let dislikedUserId = parseInt(req.params.userId);
+
+  let connection = mysql.createConnection(connInfo);
+   let query =  `insert into people(user_id,people_disliked) 
+                values(?,COALESCE(JSON_ARRAY_APPEND(people_disliked, '$', ?), JSON_ARRAY(?)))
+                on duplicate key update
+                people_disliked=COALESCE(JSON_ARRAY_APPEND(people_disliked, '$', ?), JSON_ARRAY(?));
+              `;
+  let params = [req.user.user_id,dislikedUserId,dislikedUserId,dislikedUserId,dislikedUserId];
+
+  // let query =  `insert into people(user_id,people_disliked) 
+  //               values(?,'[?]')
+  //               on duplicate key update
+  //               people_disliked=JSON_ARRAY_APPEND(people_disliked,'$',?);
+  //               `;
+  // let params = [req.user.user_id,dislikedUserId,dislikedUserId];
 
   let sql=connection.query(query,params, (err, results) => {
       console.log(sql.sql);
@@ -167,5 +209,6 @@ let likeUser = (req,res) => {
 module.exports = {
   // updateUserLocation,
   getNearByPeople,
-  likeUser
+  likeUser,
+  dislikeUser
 };

@@ -48,6 +48,17 @@ class Home extends Component {
 				console.log('error in updating like');
 			});
 		}
+
+		this.dislikedHandler = (dislikedUserId) =>{
+			console.log("dislike clicked",dislikedUserId);
+			axios
+			.post('/dislike/'+dislikedUserId)
+			.then(response=>{
+				console.log("disliked");
+			}).catch(err=>{
+				console.log('error in updating dislike');
+			});
+		}
 	}
 
 	render() {
@@ -75,7 +86,7 @@ class Home extends Component {
 						<img src={"https://graph.facebook.com/" + item.fb_id + "/picture?height=100&width=100"}/> 
 						<br/>
 						<i className="fa fa-heart" onClick={() => this.likedHandler(item.user_id)}></i>
-						<i className="fa fa-heart-o"></i>
+						<i className="fa fa-heart-o" onClick={() => this.dislikedHandler(item.user_id)}></i>
 
 
 					</div>
