@@ -64,7 +64,7 @@ let nearByPeople = (lat,lng,userId,genderPreference) => {
 
   let connection = mysql.createConnection(connInfo);
   let params = [];
-  let query = `SELECT 
+  let query1 = `SELECT 
                 users.user_id,users.fb_id,location.last_active,users.first_name,users.fb_link,users.gender ,
                 (
                    6371 *
@@ -79,9 +79,12 @@ let nearByPeople = (lat,lng,userId,genderPreference) => {
                 HAVING distance < 20 and
                 users.gender=? and user_id != ? 
                 ORDER BY distance;`;
-    params.push(lat,lng,lat,genderPreference,userId);
+  params.push(lat,lng,lat,genderPreference,userId);
 
-  let sql = connection.query(query,params, (err, results) => {
+  let query2 = "SELECT user_id,people_liked,people_disliked from people where user_id = ?;"
+  params.push(userId);
+
+  let sql = connection.query(query1+query2,params, (err, results) => {
 
     // console.log(sql.sql);
     if (err) {
@@ -128,7 +131,7 @@ let getNearByPeople = (req,res) => {
 
   }).then((data)=>{
 
-    res.send(data);
+    res.send({nearByPeople:data[0],likeHistory:data[1]});
   },(err)=>{
     winston.error(err);
     res.status.send(err);

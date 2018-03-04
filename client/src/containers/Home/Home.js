@@ -28,7 +28,7 @@ class Home extends Component {
 					.get('/nearby-people/lat/' + data.latitude + '/lng/' + data.longitude)
 					.then(response => {
 						console.log('nearby people: ', response.data);
-						this.setState({ loading: false, people: response.data });
+						this.setState({ loading: false, people: response.data.nearByPeople });
 					})
 					.catch(err => {
 						console.log('error in getting nearby people');
